@@ -162,7 +162,7 @@ export const onAiChatBotAssistant = async (
                         author
                     )
 
-                    onRealTimeChat(
+                    await onRealTimeChat(
                         checkCustomer.customer[0].chatRoom[0].id,
                         message,
                         'user',
@@ -174,7 +174,7 @@ export const onAiChatBotAssistant = async (
                             checkCustomer.User?.clerkId!
                         )
 
-                        onMailer(user.emailAddresses[0].emailAddress)
+                        await onMailer(user.emailAddresses[0].emailAddress)
 
                         //update mail status to prevent spamming
                         const mailed = await client.chatRoom.update({

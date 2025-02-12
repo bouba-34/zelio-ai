@@ -152,6 +152,7 @@ export const onRealTimeChat = async (
             role,
         },
     })
+    console.log("envoie d'un chat via realtime-mode depuis (onRealtimeChat) au chatRoom", chatroomId)
 }
 
 export const onOwnerSendMessage = async (
@@ -190,6 +191,7 @@ export const onOwnerSendMessage = async (
         })
 
         if (chat) {
+            console.log("owner send a message")
             return chat
         }
     } catch (error) {

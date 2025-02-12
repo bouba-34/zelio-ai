@@ -6,13 +6,14 @@ type Props = {
     title: string
     value: string | number
     icon: React.ComponentType<{ className?: string }>
+    money: boolean
     trend?: {
         value: number
         isPositive: boolean
     }
 }
 
-const MetricsCard = ({ title, value, icon: Icon, trend }: Props) => {
+const MetricsCard = ({ title, value, icon: Icon, money,  trend }: Props) => {
     return (
         <Card className="relative overflow-hidden border-gray-700/20 bg-gradient-to-br from-gray-800 to-gray-900 backdrop-blur-lg">
             <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-cyan-500" />
@@ -32,7 +33,7 @@ const MetricsCard = ({ title, value, icon: Icon, trend }: Props) => {
                 </div>
                 <div className="mt-4">
                     <p className="text-sm font-medium text-gray-300">{title}</p>
-                    <p className="mt-2 text-3xl font-bold text-white">{value}</p>
+                    <p className="mt-2 text-3xl font-bold text-white">{ money ? "$"+value : value}</p>
                 </div>
             </CardContent>
         </Card>

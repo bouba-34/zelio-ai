@@ -5,6 +5,7 @@ import {onLoginUser} from "@/actions/auth";
 
 const NavBar = async () => {
     const authenticated = await onLoginUser()
+    console.log("authenticated", authenticated)
     return (
         <header className="container mx-auto px-4 py-8">
             <nav className="flex justify-between items-center">

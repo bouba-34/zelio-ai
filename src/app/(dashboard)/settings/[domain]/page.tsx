@@ -1,5 +1,3 @@
-import DomainHeader from '@/components/domain/domain-header'
-import DomainTabs from '@/components/domain/domain-tabs'
 import React from 'react'
 import {onGetCurrentDomainInfo} from "@/actions/settings";
 import { redirect } from 'next/navigation';

@@ -44,9 +44,6 @@ export function FAQSection({ faqs }: FAQSectionProps) {
                 ))}
             </Accordion>
 
-            <div className="pt-4 text-center">
-                <p className="text-xs text-gray-500">Powered by Zelio</p>
-            </div>
         </motion.div>
     )
 }

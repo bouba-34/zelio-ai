@@ -38,7 +38,9 @@ export const onCompleteUserRegistration = async (
 export const onLoginUser = async () => {
     const user = await currentUser()
 
-    if (!user) redirectToSignIn()
+    if (!user)
+        return null
+        //redirectToSignIn()
     else {
         try {
             const authenticated = await client.user.findUnique({

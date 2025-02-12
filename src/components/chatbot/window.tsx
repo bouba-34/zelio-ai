@@ -1,17 +1,18 @@
 import { ChatBotMessageProps } from '@/schemas/conversation.schema'
-import React, {forwardRef, useEffect, useRef, useState} from 'react'
+import React, {forwardRef, useState} from 'react'
 import { UseFormRegister } from 'react-hook-form'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '../ui/tabs'
+import {Tabs, TabsList, TabsTrigger} from '../ui/tabs'
 import Bubble from './bubble'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import {Bot, HelpCircle, MoreVertical, Paperclip, Phone, Send, Smile} from 'lucide-react'
+import {Bot, HelpCircle, MoreVertical, Paperclip, Phone, Send, Smile, User} from 'lucide-react'
 import { Label } from '../ui/label'
 import {Badge} from "@/components/ui/badge";
 import {AnimatePresence, motion} from "framer-motion";
 import {FAQSection} from "@/components/chatbot/faq-section";
-import Responding from "@/components/chatbot/responding";
+import {Responding} from "@/components/chatbot/responding";
+import RealTimeMode from "@/components/chatbot/real-time";
 
 type Props = {
     errors: any
@@ -66,20 +67,11 @@ export const BotWindow = forwardRef<HTMLDivElement, Props>(
     ) => {
         //console.log(errors)
 
-        //const [isTyping, setIsTyping] = useState(false)
         const [activeTab, setActiveTab] = useState("chat")
-        //const messagesEndRef = useRef<HTMLDivElement>(null)
 
-        /*const scrollToBottom = () => {
-            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-        }*/
 
-        /*useEffect(() => {
-            scrollToBottom()
-        }, [chats, messagesEndRef, scrollToBottom]) // Added messagesEndRef to dependencies*/
-
-        return (
-            <div className="w-full max-w-md mx-auto h-[600px] rounded-xl overflow-hidden border border-gray-800">
+    return (
+            <div className="w-[400px] max-w-md mx-auto h-[580px] rounded-xl overflow-hidden border border-gray-800">
                 <div className="flex flex-col h-full bg-gradient-to-b from-gray-900 to-gray-800">
                     {/* Header */}
                     <div className="sticky top-0 z-20 p-4 border-b border-gray-800 bg-gradient-to-r from-gray-900 to-gray-800">
@@ -95,9 +87,25 @@ export const BotWindow = forwardRef<HTMLDivElement, Props>(
                                 <div>
                                     <div className="flex items-center gap-2">
                                         <h2 className="text-sm font-semibold text-white">Sales Rep - <span className="text-sm">{domainName.split('.com')[0]}</span></h2>
-                                        <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+                                        {/*
+                                            realtimeMode?.mode ? (
+                                                <User className="h-4 w-4"/>
+                                            ) : (
+                                                <Bot className="h-4 w-4" />
+                                            )
                                             Online
-                                        </Badge>
+                                        </Badge>*/}
+                                        {realtimeMode?.mode ? (
+                                            <RealTimeMode
+                                                setChats={setChat}
+                                                chatRoomId={realtimeMode.chatroom}
+                                            />
+                                        ) : (
+                                            <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+                                                <Bot className="h-4 w-4" />
+                                                Online
+                                            </Badge>
+                                        )}
                                     </div>
                                     <p className="text-xs text-gray-400">Typically replies in a few minutes</p>
                                 </div>
@@ -147,17 +155,16 @@ export const BotWindow = forwardRef<HTMLDivElement, Props>(
                             >
                                 {/* Messages */}
                                 <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-hide">
-                                    <AnimatePresence initial={false}>
-                                        {chats.map((chat, key) => (
-                                            <Bubble message={chat} key={key} />
-                                        ))}
-                                    </AnimatePresence>
+                                        <AnimatePresence initial={false}>
+                                            {chats.map((chat, key) => (
+                                                <Bubble message={chat} key={key} />
+                                            ))}
+                                        </AnimatePresence>
 
-                                    {/* Typing Indicator */}
-                                    <AnimatePresence>
-                                        {onResponding && <Responding/>}
-                                    </AnimatePresence>
-
+                                        {/* Typing Indicator */}
+                                        <AnimatePresence>
+                                            {onResponding && <Responding/>}
+                                        </AnimatePresence>
                                     <div ref={ref} />
                                 </div>
 
@@ -165,21 +172,20 @@ export const BotWindow = forwardRef<HTMLDivElement, Props>(
                                 <div className="sticky bottom-0 p-4 border-t border-gray-800 bg-gradient-to-r from-gray-900 to-gray-800">
                                     <form onSubmit={onChat} className="flex items-center gap-2">
                                         <Label htmlFor="bot-image">
-                                        <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
-                                            <Paperclip className="h-4 w-4" />
+                                            <Paperclip className="h-4 w-4 text-gray-400 hover:text-white" />
                                             <Input
                                                 {...register('image')}
                                                 type="file"
                                                 id="bot-image"
                                                 className="hidden"
                                             />
-                                        </Button>
                                         </Label>
-                                        <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+                                        <Label htmlFor={"emoji"} className="text-gray-400 hover:text-white">
                                             <Smile className="h-4 w-4" />
-                                        </Button>
+                                        </Label>
                                         <Input
                                             {...register('content')}
+                                            disabled={onResponding}
                                             placeholder="Type your message..."
                                             className="flex-1 bg-gray-800/50 border-gray-700/50 text-white placeholder:text-gray-500
                              focus:ring-2 focus:ring-blue-500/20"
@@ -214,6 +220,9 @@ export const BotWindow = forwardRef<HTMLDivElement, Props>(
                             </motion.div>
                         )}
                     </AnimatePresence>
+                    <div className="pt-2 text-center">
+                        <p className="text-xs text-gray-500 mb-2">Powered by Zelio AI</p>
+                    </div>
                 </div>
             </div>
         )

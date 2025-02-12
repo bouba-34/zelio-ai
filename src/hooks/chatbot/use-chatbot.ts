@@ -57,16 +57,14 @@ export const useChatBot = () => {
     >(undefined)
 
     const onScrollToBottom = () => {
-        messageWindowRef.current?.scroll({
-            top: messageWindowRef.current.scrollHeight,
-            left: 0,
-            behavior: 'smooth',
-        })
+        messageWindowRef.current?.scrollIntoView({ behavior: "smooth" })
     }
+
+
 
     useEffect(() => {
         onScrollToBottom()
-    }, [onChats, messageWindowRef])
+    }, [onChats, messageWindowRef, botOpened])
 
     useEffect(() => {
         postToParent(
@@ -123,7 +121,11 @@ export const useChatBot = () => {
             }
 
             console.log('🟡 RESPONSE FROM UC', uploaded.uuid)
-            setOnAiTyping(true)
+
+            if(!onRealTime?.mode){
+                setOnAiTyping(true)
+            }
+
             const response = await onAiChatBotAssistant(
                 currentBotId!,
                 onChats,
@@ -157,7 +159,9 @@ export const useChatBot = () => {
                 ])
             }
 
-            setOnAiTyping(true)
+            if(!onRealTime?.mode){
+                setOnAiTyping(true)
+            }
 
             const response = await onAiChatBotAssistant(
                 currentBotId!,
@@ -165,6 +169,7 @@ export const useChatBot = () => {
                 'user',
                 values.content
             )
+
 
             if (response) {
                 setOnAiTyping(false)
@@ -209,13 +214,15 @@ export const useRealTime = (
         >
     >
 ) => {
-    const counterRef = useRef(1)
+    //const counterRef = useRef(1)
 
     useEffect(() => {
+        console.log("chatRoom", chatRoom, " is going to be subscribed to real-time from useRealTime for the chatbot by the user")
         pusherClient.subscribe(chatRoom)
         pusherClient.bind('realtime-mode', (data: any) => {
             console.log('✅', data)
-            if (counterRef.current !== 1) {
+            //console.log("current counterRef", counterRef.current)
+            /*if (counterRef.current !== 1) {
                 setChats((prev: any) => [
                     ...prev,
                     {
@@ -223,8 +230,15 @@ export const useRealTime = (
                         content: data.chat.message,
                     },
                 ])
-            }
-            counterRef.current += 1
+            }*/
+            setChats((prev: any) => [
+                ...prev,
+                {
+                    role: data.chat.role,
+                    content: data.chat.message,
+                },
+            ])
+            //counterRef.current += 1
         })
         return () => {
             pusherClient.unbind('realtime-mode')

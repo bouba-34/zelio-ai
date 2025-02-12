@@ -483,6 +483,8 @@ export const onGetAllFilterQuestions = async (id: string) => {
 export const onGetPaymentConnected = async () => {
     try {
         const user = await currentUser()
+
+
         if (user) {
             const connected = await client.user.findUnique({
                 where: {

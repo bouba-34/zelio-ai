@@ -30,6 +30,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import DomainMenu from "@/components/sidebar/domain-menu";
+import useSideBar from "@/context/use-sidebar";
 
 type Props = {
     children: ReactNode
@@ -56,6 +57,7 @@ const SideBar = ({children, domains}: Props) => {
     ]
 
     const pathname = usePathname()
+    const { onSignOut } = useSideBar()
 
     return (
         <SidebarProvider>
@@ -127,7 +129,9 @@ const SideBar = ({children, domains}: Props) => {
                                     <Bell className="size-5" />
                                     <span className="absolute -top-0.5 -right-0.5 size-2.5 bg-blue-500 rounded-full border-2 border-blue-950" />
                                 </Button>
-                                <Button variant="ghost" size="sm" className="text-gray-200 hover:text-white hover:bg-blue-700/20 gap-2">
+                                <Button
+                                    onClick={onSignOut}
+                                    variant="ghost" size="sm" className="text-gray-200 hover:text-white hover:bg-blue-700/20 gap-2">
                                     <LogOut className="size-4" />
                                     <span className="text-sm font-medium">Logout</span>
                                 </Button>

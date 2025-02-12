@@ -3,7 +3,7 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {TypingIndicator} from "@/components/chatbot/typing-indicator";
 import {motion} from "framer-motion";
 
-const Responding = () => {
+export const Responding = () => {
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -19,4 +19,28 @@ const Responding = () => {
         </motion.div>
     )
 }
-export default Responding
+
+/*import React from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+
+export const Responding = () => {
+    return (
+        <div className="self-start flex items-end gap-3">
+            <Avatar className="w-5 h-5">
+                <AvatarImage
+                    src="https://github.com/shadcn.png"
+                    alt="@shadcn"
+                />
+                <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div className="chat-bubble">
+                <div className="typing">
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                    <div className="dot"></div>
+                </div>
+            </div>
+        </div>
+    )
+}*/
+
